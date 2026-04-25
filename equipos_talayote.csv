@@ -1,0 +1,53 @@
+area;equipo;marca;modelo;nombre;ram;so;cpu;dhcp;ip
+RH;PC(SERVIDOR);LENOVO;11HAS06D00;DESKTOP-296PHMD;8;W11;I5 10400;192.168.2.200;
+RH;LAPTOP;ASUS;VIVOBOOK;JUANGARCIA;16;W11;I5 1334U;192.168.137.171;
+RH;laptop;asus;vivobook;recursos humanos;8;w11;i3 10110u;192.168.2.254;192.168.2.108
+
+ENFERMERIA;laptop;asus;vivobook;SERVICIOMEDICO;8;W11;I3-10110U;192.168.64.53;
+ENFERMERIA;laptop;asus;vivobook;servicio medico;8;w11;i3 10110u;na;na
+
+OFICINA DE PRODUCCION;LAPTOP;DELL;INSPIRON 5570;DESKTOP-HHGJGEA;12;W10;I3-8130U;192.168.2.54;
+OFICINA DE PRODUCCION;lap;asus;vivobook;talayote;8;w11;i3 10110u;192.168.2.54;192.168.2.247
+
+OFFICINA DE SEGURIDAD;LAPTOP;asus;vivobook;desktop pml1odm;8;w10;i3 10110u;192.168.2.254;192.168.2.197
+OFFICINA DE SEGURIDAD;laptop;dell;inspiron 5570;desktop hhgjgea;12;w10;i3 8130u;192.168.68.1;192.168.68.74
+
+OFICINA PLANTA ALTA;LAPTOP;dell;INSPIRON 3501;desktop-64ak18q8;8;w10;i3-1115G4;192.168.2.120;
+OFICINA PLANTA ALTA;LAPTOP;asus;ASPIRE A315-58;LAPTOP-4FLOFQMA;8;W11;I5-1135G;192.168.2.153;
+OFICINA PLANTA ALTA;LAPTOP;Macbook;;cinthya;8;MACOS SEQUOIA;M1;192.168.2.223;
+OFICINA PLANTA ALTA;pc;Lenovo;v50s-07ibm;desktop-ruvq36j;8;w11;core i5 décima gen;192.168.2.254;
+OFICINA PLANTA ALTA;laptop;lenovo;thinkpad e14gen3;;16;w11;ryzen 3 5300u;192.168.2.254;192.168.2.148
+OFICINA PLANTA ALTA;laptop;lenovo;thinkbook 14-ilm;desktop-lhk5qug;8;w10;i3 10110u;192.168.2.254;192.168.2.112
+OFICINA PLANTA ALTA;pc;lenovo;fmv530s;desktopllr64rs;16;w10;i7 9700;192.168.2.254;192.168.2.222
+OFICINA PLANTA ALTA;pc;dell;optiplex3060;talayote1;8;w11;i5 8500;192.168.2.254;192.168.2.235
+OFICINA PLANTA ALTA;laptop;dell;inspiron 15300;desktop6ak18q8;8;w11;i3 1115g4;192.168.2.254;192.168.2.219
+OFICINA PLANTA ALTA;lap;acer;ASPIRE A315-58;LAPTOP-4FLOFQNA;8;W11;I5 1135G7;192.168.2.254;192.168.2.211
+OFICINA PLANTA ALTA;pc;dell;optiplex3060;desktop-6hsbghd;16;w11;i5 8500;192.168.2.254;192.168.2.152
+
+NAVE 1;pc tomate;dell;inspiron 3647;clam1;8;w8;i5 4460s;192.168.2.254;192.168.2.32
+NAVE 1;pc medley;dell;inspiron 3647;supervisor 2;8;w8;i5 4460s;192.168.2.254;192.168.2.33
+NAVE 1;pc pimiento;dell;inspiron 3268;produccion5;8;w10;i5 7400;192.168.2.254;192.168.2.183
+NAVE 1;pc tomate 2;hp;slim desktop 290;produccion 2022;8;w11;celeron;192.168.2.254;192.168.2.231
+NAVE 1;pc banda;asus;ensamblada;operador;16;w10;i7 2700f;na;192.168.2.2
+NAVE 1;pc banda 2;asus;ensamblada;operador;8;w10;i3 1105;na;na
+
+ALMACEN;pc all in one;hp;f3f29aa;talayote;12;w10;a4-5000 amd;192.168.2.254;192.168.2.121
+ALMACEN;pc;dell;07a3;talayote 2;8;w10;i5 7500;192.168.2.254;192.168.2.182
+ALMACEN;pc;nuc;boxnuc c7cjyhn;almacen;8;w10;celeron;192.168.2.254;192.168.2.246
+
+NAVE 2;pc brocoli;dell;vostro 0995;etiquetas 3;8;w11;i5 9400;192.168.2.254;192.168.2.146
+NAVE 2;pc apio;nuc;11atkc4;etiquetas 1;8;w11;celeron;192.168.2.254;192.168.2.232
+NAVE 2;lap;lenovo;ideapad 81vw;desktop-odg49c5;20;w11;i5 1035;192.168.2.254;na
+NAVE 2;lap calidad;dell;inspiron 3501;calidad;8;w11;i5 1035;192.168.2.254;192.168.2.132
+
+EMBARQUES;pc;dell;vostro 0995;embarques;8;w11;i5 9400;192.168.2.254;192.168.2.149
+
+MANTENIMIENTO;lap;lenovo;ideapad 340;latop-9ogp4ikt;20;w11;i5 1035;192.168.0.1;192.168.0.246
+MANTENIMIENTO;lap;lenovo;ideapad s340;laptop eh7jiluv;20;w11;i5 1035g4;192.168.0.1;192.168.0.245
+
+CALIDAD;lap;asus;vivobook;calidad;8;w11;i3 10110u;192.168.137.1;192.168.137.34
+CALIDAD;lap;surface;1769;calidad;8;w10;i5 7200;192.168.68.1;192.168.68.58
+CALIDAD;lap;surface;1867;calidadtal;8;w11;i5 1035g7;192.168.137.1;192.168.137.245
+
+INSPECCION RECIBO;lap;lenovo;ideapad;embarques;8;w11;i3 10110u;192.168.2.254;192.168.2.131
+INSPECCION RECIBO;lap;lenovo thinkpad;e14gen3;recibo;16;w11;ryzen 3 5300u;192.168.2.254;192.168.2.136

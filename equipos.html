@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Equipos - Talayote Group</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Equipos</h1>
+    <p>Inventario de equipos por área</p>
+</header>
+
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="croquis.html">Croquis</a>
+</nav>
+
+<section id="equipos">
+
+    <h1>Gestión de Equipos</h1>
+
+    <!-- SELECTOR DE ÁREA -->
+    <div class="selector-area">
+        <label>Selecciona un área:</label>
+        <select id="areaSelect">
+            <option value="">-- Selecciona --</option>
+        </select>
+    </div>
+
+    <!-- CONTENEDOR DINÁMICO -->
+    <div id="contenedorEquipos" class="grid-equipos"></div>
+
+</section>
+
+<script src="equipos.js"></script>
+
+</body>
+</html>
