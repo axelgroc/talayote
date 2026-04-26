@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
           select.appendChild(option);
         });
 
-// 📌 FILTRO DE EQUIPOS
+// FILTRO DE EQUIPOS
 
         select.onchange = () => {
 
