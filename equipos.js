@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const PASSWORD = atob("dGFsYXlvdGUxMjM0NQ=="); 
+  const PASSWORD = "talayote12345";
 
   // SESIÓN 
 
