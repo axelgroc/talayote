@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const BASE_URL = "https://validacion.infinityfreeapp.com";
+  const BASE_URL = "https://contrasena.infinityfreeapp.com";
   let TOKEN = null;
 
 // LOGIN UI
