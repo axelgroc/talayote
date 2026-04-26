@@ -1,5 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  const PASSWORD = atob("dGFsYXlvdGUxMjM0NQo="); 
+
+  // SESIÓN 
+
+  if (localStorage.getItem("auth") === "ok") {
+    cargarCSV();
+    return;
+  }
+
   // LOGIN UI
 
   const loginContainer = document.createElement("div");
@@ -26,43 +35,29 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(loginContainer);
 
   document.body.style.overflow = "hidden";
-
+  
   // LOGIN
 
-  btn.addEventListener("click", login);
+  btn.addEventListener("click", validar);
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") login();
+    if (e.key === "Enter") validar();
   });
 
-  async function login() {
-    try {
-      error.textContent = "";
+  function validar() {
+    error.textContent = "";
 
-      const formData = new FormData();
-      formData.append("password", input.value.trim());
-
-      const res = await fetch("https://contrasena.infinityfreeapp.com/login.php", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await res.json();
-
-      if (!data.success) {
-        error.textContent = "Contraseña incorrecta";
-        return;
-      }
-
-      // acceso permitido
-      loginContainer.remove();
-      document.body.style.overflow = "auto";
-
-      cargarCSV();
-
-    } catch (err) {
-      console.error("Error login:", err);
-      error.textContent = "Error de conexión";
+    if (input.value.trim() !== PASSWORD) {
+      error.textContent = "Contraseña incorrecta";
+      return;
     }
+
+    // ✔ guardar sesión
+    localStorage.setItem("auth", "ok");
+
+    loginContainer.remove();
+    document.body.style.overflow = "auto";
+
+    cargarCSV();
   }
 
   // CARGA CSV
@@ -113,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // FILTRADO
-
+        
         select.onchange = () => {
 
           const area = select.value;
