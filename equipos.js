@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   // CONTRASEÑA
-  
-  const PASSWORD = atob("dGFsYXlvdGUxMjM0NQ=="); // talayote12345
+
+  const PASSWORD = atob("dGFsYXlvdGUxMjM0NQ=="); 
 
   // LOGIN UI
 
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cargarCSV();
   }
-  
+
   // CARGA CSV
 
   function cargarCSV() {
@@ -84,6 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
+        // ÁREAS
+
         select.innerHTML = `<option value="">Selecciona un área</option>`;
 
         const areas = [...new Set(
@@ -96,6 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
           option.textContent = area;
           select.appendChild(option);
         });
+
+        // FILTRADO
 
         select.onchange = () => {
 
@@ -119,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const titulo = document.createElement("h3");
             titulo.textContent = e[1] || "Equipo";
 
+            // FUNCIÓN CORREGIDA
             const crearCampo = (label, valor, clase = "") => {
               const p = document.createElement("p");
               if (clase) p.classList.add(clase);
@@ -126,7 +131,10 @@ document.addEventListener("DOMContentLoaded", () => {
               const b = document.createElement("b");
               b.textContent = label + ": ";
 
-              p.append(b);
+              const span = document.createElement("span");
+              span.textContent = valor || "N/A";
+
+              p.append(b, span);
               return p;
             };
 
