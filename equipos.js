@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData();
       formData.append("password", input.value.trim());
 
-      fetch("https://contrasena.infinityfreeapp.com/login.php", {
+      const res = await fetch("https://contrasena.infinityfreeapp.com/login.php", {
         method: "POST",
         body: formData
       });
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // ✔ acceso permitido
+      // acceso permitido
       loginContainer.remove();
       document.body.style.overflow = "auto";
 
