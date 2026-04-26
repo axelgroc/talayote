@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-// LOGIN UI
+  // LOGIN UI
 
   const loginContainer = document.createElement("div");
   loginContainer.className = "login-overlay";
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.style.overflow = "hidden";
 
-// LOGIN
+  // LOGIN
 
   btn.addEventListener("click", login);
   input.addEventListener("keydown", (e) => {
@@ -36,10 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function login() {
     try {
-      const formData = new FormData();
-      formData.append("password", input.value);
+      error.textContent = "";
 
-      fetch("https://contrasena.infinityfreeapp.com/login.php", {
+      const formData = new FormData();
+      formData.append("password", input.value.trim());
+
+      const res = await fetch("https://contrasena.infinityfreeapp.com/login.php", {
         method: "POST",
         body: formData
       });
@@ -51,18 +53,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      // ✔ acceso permitido
       loginContainer.remove();
       document.body.style.overflow = "auto";
 
       cargarCSV();
 
     } catch (err) {
-      console.error(err);
+      console.error("Error login:", err);
       error.textContent = "Error de conexión";
     }
   }
 
-  // CARGA CSV (LOCAL)
+  // CARGA CSV
 
   function cargarCSV() {
 
@@ -94,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-// ÁREAS
+        // ÁREAS
 
         select.innerHTML = `<option value="">Selecciona un área</option>`;
 
@@ -109,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
           select.appendChild(option);
         });
 
-// FILTRADO
+        // FILTRADO
 
         select.onchange = () => {
 
@@ -156,8 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const dhcp = crearCampo("DHCP", e[8]);
             const ip = crearCampo("IP", e[9], "ip");
 
-// badge red
-
+            // BADGE RED
             const badge = document.createElement("span");
             badge.classList.add("badge");
 
