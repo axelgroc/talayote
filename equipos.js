@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const BASE_URL = "https://contrasena.infinityfreeapp.com";
-  let TOKEN = null;
-
 // LOGIN UI
 
   const loginContainer = document.createElement("div");
@@ -28,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loginContainer.appendChild(loginBox);
   document.body.appendChild(loginContainer);
 
+  document.body.style.overflow = "hidden";
+
 // LOGIN
 
   btn.addEventListener("click", login);
@@ -37,10 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function login() {
     try {
-      const res = await fetch(`${BASE_URL}/login.php`, {
+      const formData = new FormData();
+      formData.append("password", input.value);
+
+      const res = await fetch("https://contrasena.infinityfreeapp.com/login.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: input.value })
+        body: formData
       });
 
       const data = await res.json();
@@ -50,73 +51,151 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      TOKEN = data.token;
       loginContainer.remove();
-      iniciarSistema();
+      document.body.style.overflow = "auto";
+
+      cargarCSV();
 
     } catch (err) {
-      error.textContent = "Error de conexión";
       console.error(err);
+      error.textContent = "Error de conexión";
     }
   }
 
-// SISTEMA
+  // CARGA CSV (LOCAL)
 
-  async function iniciarSistema() {
+  function cargarCSV() {
 
-    const res = await fetch(`${BASE_URL}/datos.php?token=${TOKEN}`);
-    const json = await res.json();
+    fetch("equipos_talayote.csv")
+      .then(res => {
+        if (!res.ok) throw new Error("No se pudo cargar CSV");
+        return res.text();
+      })
+      .then(data => {
 
-    const filas = json.data
-      .trim()
-      .split("\n")
-      .map(f => f.split(";"));
+        const limpiar = (txt) =>
+          String(txt || "")
+            .replace(/</g, "")
+            .replace(/>/g, "")
+            .replace(/script/gi, "")
+            .trim();
 
-    const select = document.getElementById("areaSelect");
-    const contenedor = document.getElementById("contenedorEquipos");
+        const filas = data
+          .trim()
+          .split("\n")
+          .map(f => f.split(";").map(c => limpiar(c)))
+          .filter(f => f.length >= 10 && f[0] && f[1]);
 
-    const areas = [...new Set(filas.map(f => f[0]).filter(a => a !== "area"))];
+        const select = document.getElementById("areaSelect");
+        const contenedor = document.getElementById("contenedorEquipos");
 
-    select.innerHTML = `<option value="">Selecciona un área</option>`;
+        if (!select || !contenedor) {
+          console.error("Faltan elementos HTML");
+          return;
+        }
 
-    areas.forEach(a => {
-      const opt = document.createElement("option");
-      opt.value = a;
-      opt.textContent = a;
-      select.appendChild(opt);
-    });
+// ÁREAS
 
-    select.onchange = () => {
+        select.innerHTML = `<option value="">Selecciona un área</option>`;
 
-      contenedor.innerHTML = "";
+        const areas = [...new Set(
+          filas.map(f => f[0]).filter(a => a && a.toLowerCase() !== "area")
+        )];
 
-      const filtrados = filas.filter(f => f[0] === select.value);
+        areas.forEach(area => {
+          const option = document.createElement("option");
+          option.value = area;
+          option.textContent = area;
+          select.appendChild(option);
+        });
 
-      filtrados.forEach(e => {
+// FILTRADO
 
-        const card = document.createElement("div");
-        card.className = "equipo-card";
+        select.onchange = () => {
 
-        card.innerHTML = `
-          <h3>${e[1] || "Equipo"}</h3>
+          const area = select.value;
+          contenedor.innerHTML = "";
 
-          <p><b>Marca:</b> ${e[2] || "N/A"}</p>
-          <p><b>Modelo:</b> ${e[3] || "N/A"}</p>
-          <p><b>Nombre:</b> ${e[4] || "N/A"}</p>
+          if (!area) return;
 
-          <p class="ram"><b>RAM:</b> ${e[5] || "0"} GB</p>
-          <p><b>S.O:</b> ${e[6] || "N/A"}</p>
-          <p><b>CPU:</b> ${e[7] || "N/A"}</p>
+          const equipos = filas.filter(f => f[0] === area);
 
-          <p><b>DHCP:</b> ${e[8] || "N/A"}</p>
+          if (equipos.length === 0) {
+            contenedor.textContent = "No hay equipos en esta área.";
+            return;
+          }
 
-          <p class="ip"><b>IP:</b> ${e[9] || "N/A"}</p>
-        `;
+          equipos.forEach(e => {
 
-        contenedor.appendChild(card);
+            const card = document.createElement("div");
+            card.className = "equipo-card";
+
+            const titulo = document.createElement("h3");
+            titulo.textContent = e[1] || "Equipo";
+
+            const crearCampo = (label, valor, clase = "") => {
+              const p = document.createElement("p");
+              if (clase) p.classList.add(clase);
+
+              const b = document.createElement("b");
+              b.textContent = label + ": ";
+
+              const span = document.createElement("span");
+              span.textContent = valor || "N/A";
+
+              p.append(b, span);
+              return p;
+            };
+
+            const marca = crearCampo("Marca", e[2]);
+            const modelo = crearCampo("Modelo", e[3]);
+            const nombre = crearCampo("Nombre", e[4]);
+            const ram = crearCampo("RAM", (e[5] || "0") + " GB", "ram");
+            const so = crearCampo("S.O", e[6]);
+            const cpu = crearCampo("CPU", e[7]);
+            const dhcp = crearCampo("DHCP", e[8]);
+            const ip = crearCampo("IP", e[9], "ip");
+
+// badge red
+
+            const badge = document.createElement("span");
+            badge.classList.add("badge");
+
+            const tipo = (e[8] || "").toLowerCase();
+
+            if (tipo.includes("wifi")) {
+              badge.classList.add("badge-wifi");
+              badge.textContent = "WiFi";
+            } else if (tipo.includes("lan")) {
+              badge.classList.add("badge-lan");
+              badge.textContent = "LAN";
+            } else {
+              badge.classList.add("badge-na");
+              badge.textContent = "N/A";
+            }
+
+            card.append(
+              titulo,
+              marca,
+              modelo,
+              nombre,
+              ram,
+              so,
+              cpu,
+              dhcp,
+              ip,
+              badge
+            );
+
+            contenedor.appendChild(card);
+          });
+
+        };
+
+      })
+      .catch(err => {
+        console.error("Error CSV:", err);
       });
-
-    };
   }
 
 });
