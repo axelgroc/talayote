@@ -1,13 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const PASSWORD = "talayote12345";
-
-  // SESIÓN 
-
-  if (localStorage.getItem("auth") === "ok") {
-    cargarCSV();
-    return;
-  }
+  // CONTRASEÑA
+  
+  const PASSWORD = atob("dGFsYXlvdGUxMjM0NQ=="); // talayote12345
 
   // LOGIN UI
 
@@ -35,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(loginContainer);
 
   document.body.style.overflow = "hidden";
-  
+
   // LOGIN
 
   btn.addEventListener("click", validar);
@@ -51,15 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // ✔ guardar sesión
-    localStorage.setItem("auth", "ok");
-
     loginContainer.remove();
     document.body.style.overflow = "auto";
 
     cargarCSV();
   }
-
+  
   // CARGA CSV
 
   function cargarCSV() {
@@ -92,8 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        // ÁREAS
-
         select.innerHTML = `<option value="">Selecciona un área</option>`;
 
         const areas = [...new Set(
@@ -107,8 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
           select.appendChild(option);
         });
 
-        // FILTRADO
-        
         select.onchange = () => {
 
           const area = select.value;
@@ -138,10 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const b = document.createElement("b");
               b.textContent = label + ": ";
 
-              const span = document.createElement("span");
-              span.textContent = valor || "N/A";
-
-              p.append(b, span);
+              p.append(b);
               return p;
             };
 
@@ -154,23 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const dhcp = crearCampo("DHCP", e[8]);
             const ip = crearCampo("IP", e[9], "ip");
 
-            // BADGE RED
-            const badge = document.createElement("span");
-            badge.classList.add("badge");
-
-            const tipo = (e[8] || "").toLowerCase();
-
-            if (tipo.includes("wifi")) {
-              badge.classList.add("badge-wifi");
-              badge.textContent = "WiFi";
-            } else if (tipo.includes("lan")) {
-              badge.classList.add("badge-lan");
-              badge.textContent = "LAN";
-            } else {
-              badge.classList.add("badge-na");
-              badge.textContent = "N/A";
-            }
-
             card.append(
               titulo,
               marca,
@@ -180,8 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
               so,
               cpu,
               dhcp,
-              ip,
-              badge
+              ip
             );
 
             contenedor.appendChild(card);
