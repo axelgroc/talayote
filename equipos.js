@@ -1,170 +1,122 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-// LOGIN
+  const BASE_URL = "https://validacion.infinityfreeapp.com";
+  let TOKEN = null;
 
-  const PASSWORD = "12345";
+// LOGIN UI
 
   const loginContainer = document.createElement("div");
-  loginContainer.style.position = "fixed";
-  loginContainer.style.top = "0";
-  loginContainer.style.left = "0";
-  loginContainer.style.width = "100%";
-  loginContainer.style.height = "100%";
-  loginContainer.style.display = "flex";
-  loginContainer.style.justifyContent = "center";
-  loginContainer.style.alignItems = "center";
-  loginContainer.style.background = "rgba(0,0,0,0.8)";
-  loginContainer.style.zIndex = "9999";
+  loginContainer.className = "login-overlay";
 
   const loginBox = document.createElement("div");
-  loginBox.style.background = "white";
-  loginBox.style.padding = "25px";
-  loginBox.style.borderRadius = "10px";
-  loginBox.style.textAlign = "center";
+  loginBox.className = "login-box";
+
+  const title = document.createElement("h2");
+  title.textContent = "Acceso";
 
   const input = document.createElement("input");
   input.type = "password";
   input.placeholder = "Ingresa la contraseña";
-  input.style.padding = "8px";
 
   const btn = document.createElement("button");
   btn.textContent = "Entrar";
-  btn.style.marginLeft = "10px";
-  btn.style.padding = "8px 12px";
 
   const error = document.createElement("p");
-  error.style.color = "red";
-  error.style.marginTop = "10px";
+  error.className = "login-error";
 
-  loginBox.append(input, btn, error);
+  loginBox.append(title, input, btn, error);
   loginContainer.appendChild(loginBox);
   document.body.appendChild(loginContainer);
 
-  btn.addEventListener("click", validar);
+// LOGIN
+
+  btn.addEventListener("click", login);
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") validar();
+    if (e.key === "Enter") login();
   });
 
-  function validar() {
-    if (input.value !== PASSWORD) {
-      error.textContent = "Contraseña incorrecta";
-      return;
-    }
+  async function login() {
+    try {
+      const res = await fetch(`${BASE_URL}/login.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: input.value })
+      });
 
-    loginContainer.remove();
-    cargarDatos();
+      const data = await res.json();
+
+      if (!data.success) {
+        error.textContent = "Contraseña incorrecta";
+        return;
+      }
+
+      TOKEN = data.token;
+      loginContainer.remove();
+      iniciarSistema();
+
+    } catch (err) {
+      error.textContent = "Error de conexión";
+      console.error(err);
+    }
   }
 
-// SISTEMA PRINCIPAL
+// SISTEMA
 
-  function cargarDatos() {
+  async function iniciarSistema() {
 
-    fetch("equipos_talayote.csv")
-      .then(res => {
-        if (!res.ok) throw new Error("No se pudo cargar el CSV");
-        return res.text();
-      })
-      .then(data => {
+    const res = await fetch(`${BASE_URL}/datos.php?token=${TOKEN}`);
+    const json = await res.json();
 
-        const limpiar = (txt) =>
-          String(txt || "")
-            .replace(/</g, "")
-            .replace(/>/g, "")
-            .replace(/script/gi, "")
-            .trim();
+    const filas = json.data
+      .trim()
+      .split("\n")
+      .map(f => f.split(";"));
 
-        const filas = data
-          .trim()
-          .split("\n")
-          .map(f => f.split(";").map(c => limpiar(c)))
-          .filter(f => f.length >= 10 && f[0] && f[1]);
+    const select = document.getElementById("areaSelect");
+    const contenedor = document.getElementById("contenedorEquipos");
 
-        const select = document.getElementById("areaSelect");
-        const contenedor = document.getElementById("contenedorEquipos");
+    const areas = [...new Set(filas.map(f => f[0]).filter(a => a !== "area"))];
 
-        if (!select || !contenedor) {
-          console.error("Faltan elementos HTML");
-          return;
-        }
+    select.innerHTML = `<option value="">Selecciona un área</option>`;
 
-// LIMPIAR SELECT
+    areas.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a;
+      opt.textContent = a;
+      select.appendChild(opt);
+    });
 
-        select.innerHTML = "";
+    select.onchange = () => {
 
-        const defaultOption = document.createElement("option");
-        defaultOption.value = "";
-        defaultOption.textContent = "Selecciona un área";
-        select.appendChild(defaultOption);
+      contenedor.innerHTML = "";
 
-        const areas = [...new Set(
-          filas.map(f => f[0]).filter(a => a && a.toLowerCase() !== "area")
-        )];
+      const filtrados = filas.filter(f => f[0] === select.value);
 
-        areas.forEach(area => {
-          const option = document.createElement("option");
-          option.value = area;
-          option.textContent = area;
-          select.appendChild(option);
-        });
+      filtrados.forEach(e => {
 
-// FILTRO DE EQUIPOS
+        const card = document.createElement("div");
+        card.className = "equipo-card";
 
-        select.onchange = () => {
+        card.innerHTML = `
+          <h3>${e[1] || "Equipo"}</h3>
 
-          const area = select.value;
-          contenedor.innerHTML = "";
+          <p><b>Marca:</b> ${e[2] || "N/A"}</p>
+          <p><b>Modelo:</b> ${e[3] || "N/A"}</p>
+          <p><b>Nombre:</b> ${e[4] || "N/A"}</p>
 
-          if (!area) return;
+          <p class="ram"><b>RAM:</b> ${e[5] || "0"} GB</p>
+          <p><b>S.O:</b> ${e[6] || "N/A"}</p>
+          <p><b>CPU:</b> ${e[7] || "N/A"}</p>
 
-          const equipos = filas.filter(f => f[0] === area);
+          <p><b>DHCP:</b> ${e[8] || "N/A"}</p>
 
-          if (equipos.length === 0) {
-            contenedor.textContent = "No hay equipos en esta área.";
-            return;
-          }
+          <p class="ip"><b>IP:</b> ${e[9] || "N/A"}</p>
+        `;
 
-          equipos.forEach(e => {
-
-            const card = document.createElement("div");
-            card.className = "equipo-card";
-
-            const titulo = document.createElement("h3");
-            titulo.textContent = e[1] || "Equipo";
-
-            const crearCampo = (label, valor) => {
-              const p = document.createElement("p");
-              const b = document.createElement("b");
-              b.textContent = label + ": ";
-              const span = document.createElement("span");
-              span.textContent = valor || "N/A";
-              p.append(b, span);
-              return p;
-            };
-
-            const marca = crearCampo("Marca", e[2]);
-            const modelo = crearCampo("Modelo", e[3]);
-            const nombre = crearCampo("Nombre", e[4]);
-            const ram = crearCampo("RAM", (e[5] || "0") + " GB");
-            const so = crearCampo("S.O", e[6]);
-            const cpu = crearCampo("CPU", e[7]);
-            const dhcp = crearCampo("DHCP", e[8]);
-            const ip = crearCampo("IP", e[9]);
-
-            card.append(titulo, marca, modelo, nombre, ram, so, cpu, dhcp, ip);
-            contenedor.appendChild(card);
-          });
-
-        };
-
-      })
-      .catch(error => {
-        console.error("Error cargando CSV:", error);
-
-        const contenedor = document.getElementById("contenedorEquipos");
-        if (contenedor) {
-          contenedor.textContent = "Error cargando los datos.";
-        }
+        contenedor.appendChild(card);
       });
+
+    };
   }
 
 });
