@@ -585,3 +585,23 @@ footer {
     font-size: 0.9em;
     margin-top: 10px;
 }
+
+/* =========================
+   CROQUIS AJUSTADO
+========================= */
+
+.croquis-img {
+    width: 100%;
+    max-width: 900px;     /* controla tamaño máximo */
+    height: auto;         /* mantiene proporción */
+    display: block;
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* opcional: efecto suave */
+.croquis-img:hover {
+    transform: scale(1.01);
+    transition: 0.3s;
+}
